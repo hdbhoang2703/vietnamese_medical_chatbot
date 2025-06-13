@@ -3,200 +3,80 @@ base_model: VietAI/vit5-large
 library_name: peft
 ---
 
-# Model Card for Model ID
+# Model Card for Vietnamese ViT5 Generator (Fine-tuned with QLoRA 4-bit)
 
-<!-- Provide a quick summary of what the model is/does. -->
-
-
+Đây là mô hình sinh văn bản tiếng Việt, được fine-tune từ **VietAI/vit5-large** bằng phương pháp **QLoRA (4-bit quantization)** thông qua thư viện **PEFT**. Mô hình đóng vai trò "Generator" trong kiến trúc **RAG (Retrieval-Augmented Generation)** dành cho chatbot y tế tiếng Việt.
 
 ## Model Details
 
 ### Model Description
 
-<!-- Provide a longer summary of what this model is. -->
-
-
-
-- **Developed by:** [More Information Needed]
-- **Funded by [optional]:** [More Information Needed]
-- **Shared by [optional]:** [More Information Needed]
-- **Model type:** [More Information Needed]
-- **Language(s) (NLP):** [More Information Needed]
-- **License:** [More Information Needed]
-- **Finetuned from model [optional]:** [More Information Needed]
-
-### Model Sources [optional]
-
-<!-- Provide the basic links for the model. -->
-
-- **Repository:** [More Information Needed]
-- **Paper [optional]:** [More Information Needed]
-- **Demo [optional]:** [More Information Needed]
+- **Tên mô hình**: ViT5-QLoRA-Generator (Vietnamese T5 Large, fine-tuned)
+- **Ứng dụng chính**: Sinh câu trả lời từ câu hỏi và tài liệu y khoa (QA + Generation).
+- **Mô hình gốc**: [VietAI/vit5-large](https://huggingface.co/VietAI/vit5-large)
+- **Phương pháp Fine-tune**: QLoRA (4-bit quantized LoRA)
+- **Thư viện sử dụng**: PEFT, Transformers, Datasets, BitsAndBytes
+- **Ngôn ngữ**: Tiếng Việt
+- **License**: Apache 2.0 
+- **Loại mô hình**: Seq2Seq Text-to-Text Generation
+- **Fine-tuned từ**: VietAI/vit5-large
 
 ## Uses
 
-<!-- Address questions around how the model is intended to be used, including the foreseeable users of the model and those affected by the model. -->
-
 ### Direct Use
 
-<!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
+- Sinh câu trả lời cho câu hỏi, dựa trên ngữ cảnh tài liệu đầu vào (passage + question).
+- Có thể ứng dụng trong chatbot, trợ lý ảo, hoặc hệ thống hỏi đáp tiếng Việt.
 
-[More Information Needed]
+### Downstream Use
 
-### Downstream Use [optional]
-
-<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
-
-[More Information Needed]
+- Kết hợp với retriever như SBERT trong kiến trúc RAG để xây dựng chatbot y tế thông minh.
 
 ### Out-of-Scope Use
 
-<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
-
-[More Information Needed]
+- Không thích hợp để trả lời các câu hỏi không có ngữ cảnh.
+- Không phù hợp cho sinh văn bản đa ngôn ngữ (chỉ hỗ trợ tiếng Việt).
 
 ## Bias, Risks, and Limitations
 
-<!-- This section is meant to convey both technical and sociotechnical limitations. -->
-
-[More Information Needed]
-
-### Recommendations
-
-<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
-
-Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
+- Có thể tạo ra câu trả lời sai lệch nếu tài liệu đầu vào không chính xác.
+- Không đảm bảo tính chính xác tuyệt đối trong lĩnh vực y tế.
+- Mô hình không có khả năng từ chối trả lời nếu không chắc chắn.
 
 ## How to Get Started with the Model
 
-Use the code below to get started with the model.
-
-[More Information Needed]
-
-## Training Details
-
-### Training Data
-
-<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
-
-[More Information Needed]
-
-### Training Procedure
-
-<!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
-
-#### Preprocessing [optional]
-
-[More Information Needed]
-
-
-#### Training Hyperparameters
-
-- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
-
-#### Speeds, Sizes, Times [optional]
-
-<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
-
-[More Information Needed]
-
-## Evaluation
-
-<!-- This section describes the evaluation protocols and provides the results. -->
-
-### Testing Data, Factors & Metrics
-
-#### Testing Data
-
-<!-- This should link to a Dataset Card if possible. -->
-
-[More Information Needed]
-
-#### Factors
-
-<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
-
-[More Information Needed]
-
-#### Metrics
-
-<!-- These are the evaluation metrics being used, ideally with a description of why. -->
-
-[More Information Needed]
-
-### Results
-
-[More Information Needed]
-
-#### Summary
-
-
-
-## Model Examination [optional]
-
-<!-- Relevant interpretability work for the model goes here -->
-
-[More Information Needed]
-
-## Environmental Impact
-
-<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
-
-Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
-
-- **Hardware Type:** [More Information Needed]
-- **Hours used:** [More Information Needed]
-- **Cloud Provider:** [More Information Needed]
-- **Compute Region:** [More Information Needed]
-- **Carbon Emitted:** [More Information Needed]
-
-## Technical Specifications [optional]
-
-### Model Architecture and Objective
-
-[More Information Needed]
-
-### Compute Infrastructure
-
-[More Information Needed]
-
-#### Hardware
-
-[More Information Needed]
-
-#### Software
-
-[More Information Needed]
-
-## Citation [optional]
-
-<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
-
-**BibTeX:**
-
-[More Information Needed]
-
-**APA:**
-
-[More Information Needed]
-
-## Glossary [optional]
-
-<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
-
-[More Information Needed]
-
-## More Information [optional]
-
-[More Information Needed]
-
-## Model Card Authors [optional]
-
-[More Information Needed]
-
-## Model Card Contact
-
-[More Information Needed]
-### Framework versions
-
-- PEFT 0.14.0
+```python
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, BitsAndBytesConfig
+from peft import PeftModel
+import torch
+
+# Cấu hình BitsAndBytes cho 4-bit
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+# Load mô hình gốc (ViT5-large) với 4-bit
+base_model = AutoModelForSeq2SeqLM.from_pretrained(
+    "VietAI/vit5-large",
+    quantization_config=bnb_config,
+    device_map="auto",
+    trust_remote_code=True,
+    use_safetensors=True,
+    low_cpu_mem_usage=True
+)
+
+# Load adapter QLoRA
+model = PeftModel.from_pretrained(base_model, "path/to/your-qlora-model")
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained("path/to/your-qlora-model")
+
+# Tạo input và sinh câu trả lời
+input_text = "question: Tôi bị sốt và đau họng. Tôi nên làm gì? context: Sốt và đau họng có thể là dấu hiệu của viêm họng do virus..."
+inputs = tokenizer(input_text, return_tensors="pt").to(model.device)
+
+outputs = model.generate(**inputs, max_new_tokens=100)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
