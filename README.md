@@ -52,8 +52,9 @@ This project is a **Vietnamese Medical Chatbot** built using the **Retrieval-Aug
 [https://huggingface.co/spaces/baohoang2734/vietnamese-medical-chatbot](https://huggingface.co/spaces/baohoang2734/vietnamese-medical-chatbot)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/yourrepo/main/assets/demo_screenshot.png"](https://github.com/hdbhoang2703/vietnamese_medical_chatbot/blob/main/assets/demo_chatbot.png" width="700"/>
+  <img src="https://raw.githubusercontent.com/hdbhoang2703/vietnamese_medical_chatbot/main/assets/demo_chatbot.png" width="700"/>
 </p>
+
 
 ---
 
