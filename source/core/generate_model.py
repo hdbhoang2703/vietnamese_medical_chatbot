@@ -1,12 +1,24 @@
+import os
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, BitsAndBytesConfig
-from peft import PeftModel, PeftConfig
+from peft import PeftModel
+from huggingface_hub import snapshot_download
 
 class GenerateModel:
     def __init__(self, 
                  peft_model_path="models/vit5-lora-med", 
-                 base_model_path="VietAI/vit5-base"): 
-        # BitsAndBytes config 
+                 base_model_repo="VietAI/vit5-large", 
+                 base_model_local="models/vit5-large"):
+
+        # Tải mô hình về local nếu chưa có
+        if not os.path.exists(base_model_local):
+            snapshot_download(
+                repo_id=base_model_repo,
+                local_dir=base_model_local,
+                local_dir_use_symlinks=False
+            )
+
+        # BitsAndBytes config
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
@@ -14,9 +26,9 @@ class GenerateModel:
             bnb_4bit_compute_dtype=torch.bfloat16
         )
 
-        # Load base model
+        # Load base model từ local
         self.base_model = AutoModelForSeq2SeqLM.from_pretrained(
-            base_model_path,
+            base_model_local,
             quantization_config=bnb_config,
             device_map="auto",
             trust_remote_code=True,
@@ -34,11 +46,11 @@ class GenerateModel:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.lora_model.to(self.device)
 
-        print("Generate model loaded successfully!")
+        print("✅ Generate model loaded successfully!")
 
     def answer(self, prompt, **generate_kwargs):
         if not prompt or not isinstance(prompt, str):
-            return "Lỗi: Prompt không hợp lệ."
+            return "⚠️ Lỗi: Prompt không hợp lệ."
 
         try:
             encoded_input = self.tokenizer(
@@ -48,7 +60,6 @@ class GenerateModel:
                 padding=True,
                 truncation=True
             )
-            
             encoded_input = {k: v.to(self.device) for k, v in encoded_input.items()}
 
             outputs = self.lora_model.generate(
@@ -65,14 +76,13 @@ class GenerateModel:
                 **generate_kwargs
             )
 
-            response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-            return response.strip()
+            return self.tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
 
         except torch.cuda.OutOfMemoryError:
             torch.cuda.empty_cache()
-            return "Lỗi: Hết bộ nhớ GPU khi sinh văn bản."
+            return "❌ Lỗi: Hết bộ nhớ GPU khi sinh văn bản."
         except Exception as e:
-            return f"Lỗi trong quá trình generate: {str(e)}"
+            return f"❌ Lỗi trong quá trình generate: {str(e)}"
 
     def generate_from_context(self, context: str, query: str, **kwargs):
         prompt = f"""
@@ -87,7 +97,7 @@ Chọn lọc thông tin cần thiết, trả lời ngắn gọn và chính xác:
         return self.answer(prompt, **kwargs)
 
 def main():
-    query = "Bạn là 1 chatbot hỗ trợ y tế. Hãy trả lời: Bệnh tiểu đường có triệu chứng gì?"     
+    query = "Bạn là 1 chatbot hỗ trợ y tế. Hãy trả lời: Bệnh tiểu đường có triệu chứng gì?"
     generate_model = GenerateModel()
     response = generate_model.answer(query)
     print("Trả lời:\n", response)
