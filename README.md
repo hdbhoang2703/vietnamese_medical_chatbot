@@ -1,4 +1,4 @@
-# 🧠 Vietnamese Medical Chatbot using RAG (Retrieval-Augmented Generation)
+# 🧠 Vietnamese Medical Chatbot using RAG
 
 ![Hugging Face Space](https://img.shields.io/badge/HF-Model-blue?logo=huggingface)
 ![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
