@@ -7,18 +7,19 @@ from huggingface_hub import snapshot_download
 class GenerateModel:
     def __init__(self, 
                  peft_model_path="models/vit5-lora-med", 
-                 base_model_repo="VietAI/vit5-large", 
-                 base_model_local="models/vit5-large"):
+                 base_model_repo="VietAI/vit5-large",
+                 base_model_local="models/vit5-large"): 
 
-        # Tải mô hình về local nếu chưa có
-        if not os.path.exists(base_model_local):
+        # Tự động tải mô hình gốc nếu chưa có local
+        if not os.path.exists(base_model_local) or not os.path.exists(os.path.join(base_model_local, "config.json")):
+            print("🔽 Đang tải mô hình base từ Hugging Face...")
             snapshot_download(
                 repo_id=base_model_repo,
                 local_dir=base_model_local,
                 local_dir_use_symlinks=False
             )
 
-        # BitsAndBytes config
+        # BitsAndBytes config 
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
@@ -26,20 +27,20 @@ class GenerateModel:
             bnb_4bit_compute_dtype=torch.bfloat16
         )
 
-        # Load base model từ local
+        # Load base model
         self.base_model = AutoModelForSeq2SeqLM.from_pretrained(
             base_model_local,
             quantization_config=bnb_config,
             device_map="auto",
             trust_remote_code=True,
-            use_safetensors=True,
+            use_safetensors=os.path.exists(os.path.join(base_model_local, "model.safetensors")),
             low_cpu_mem_usage=True
         )
 
         # Load adapter LoRA
         self.lora_model = PeftModel.from_pretrained(self.base_model, peft_model_path)
 
-        # Load tokenizer từ adapter
+        # Load tokenizer từ adapter (hoặc dùng base nếu cần)
         self.tokenizer = AutoTokenizer.from_pretrained(peft_model_path)
 
         # Setup device
@@ -50,7 +51,7 @@ class GenerateModel:
 
     def answer(self, prompt, **generate_kwargs):
         if not prompt or not isinstance(prompt, str):
-            return "⚠️ Lỗi: Prompt không hợp lệ."
+            return "Lỗi: Prompt không hợp lệ."
 
         try:
             encoded_input = self.tokenizer(
@@ -60,6 +61,7 @@ class GenerateModel:
                 padding=True,
                 truncation=True
             )
+            
             encoded_input = {k: v.to(self.device) for k, v in encoded_input.items()}
 
             outputs = self.lora_model.generate(
@@ -76,13 +78,14 @@ class GenerateModel:
                 **generate_kwargs
             )
 
-            return self.tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
+            response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+            return response.strip()
 
         except torch.cuda.OutOfMemoryError:
             torch.cuda.empty_cache()
-            return "❌ Lỗi: Hết bộ nhớ GPU khi sinh văn bản."
+            return "Lỗi: Hết bộ nhớ GPU khi sinh văn bản."
         except Exception as e:
-            return f"❌ Lỗi trong quá trình generate: {str(e)}"
+            return f"Lỗi trong quá trình generate: {str(e)}"
 
     def generate_from_context(self, context: str, query: str, **kwargs):
         prompt = f"""
@@ -95,12 +98,3 @@ Chọn lọc thông tin cần thiết, trả lời ngắn gọn và chính xác:
 """.strip()
 
         return self.answer(prompt, **kwargs)
-
-def main():
-    query = "Bạn là 1 chatbot hỗ trợ y tế. Hãy trả lời: Bệnh tiểu đường có triệu chứng gì?"
-    generate_model = GenerateModel()
-    response = generate_model.answer(query)
-    print("Trả lời:\n", response)
-
-if __name__ == "__main__":
-    main()
