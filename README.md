@@ -21,7 +21,7 @@ This project is a **Vietnamese Medical Chatbot** built using the **Retrieval-Aug
 ## 📌 System Architecture
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/yourrepo/main/assets/rag_pipeline.png" width="700"/>
+  <img src="https://github.com/hdbhoang2703/vietnamese_medical_chatbot/blob/main/assets/rag_pipeline.png" width="700"/>
 </p>
 
 **1. Input Question → 2. Embedding & Retrieval → 3. Generation → 4. Answer**
