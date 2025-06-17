@@ -1,4 +1,4 @@
-# 🧠 Vietnamese Medical Chatbot
+# Vietnamese Medical Chatbot
 
 ![Hugging Face Space](https://img.shields.io/badge/HF-Model-blue?logo=huggingface)
 ![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
@@ -10,15 +10,15 @@
 
 This project is a **Vietnamese Medical Chatbot** built using the **Retrieval-Augmented Generation (RAG)** . It combines:
 
-- 🔍 Dense retrieval using **FAISS** with a fine-tuned **SBERT** (LoRA) model
-- 🧠 Answer generation using **ViT5** (fine-tuned with QLoRA)
-- 📦 Deployable on **Hugging Face Spaces** using **Gradio**
+- Dense retrieval using **FAISS** with a fine-tuned **SBERT** (LoRA) model
+- Answer generation using **ViT5** (fine-tuned with QLoRA)
+- Deployable on **Hugging Face Spaces** using **Gradio**
 
-> 🏥 Designed to help users ask Vietnamese medical questions and receive contextual answers backed by relevant documents.
+> Designed to help users ask Vietnamese medical questions and receive contextual answers backed by relevant documents.
 
 ---
 
-## 📌 System Architecture
+## System Architecture
 
 <p align="center">
   <img src="https://github.com/hdbhoang2703/vietnamese_medical_chatbot/blob/main/assets/rag_pipeline.png" width="700"/>
@@ -32,7 +32,7 @@ This project is a **Vietnamese Medical Chatbot** built using the **Retrieval-Aug
 
 ---
 
-## 🛠️ Technical Stack & Skills
+## Technical Stack & Skills
 
 | Category        | Tool/Frameworks                                |
 |----------------|-------------------------------------------------|
