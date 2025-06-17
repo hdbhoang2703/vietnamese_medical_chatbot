@@ -6,7 +6,7 @@
 ![FAISS](https://img.shields.io/badge/FAISS-Vector_Search-yellow)
 ![Gradio](https://img.shields.io/badge/Gradio-Deployed-red?logo=gradio)
 
-## 📌 Overview
+## Overview
 
 This project is a **Vietnamese Medical Chatbot** built using the **Retrieval-Augmented Generation (RAG)** . It combines:
 
