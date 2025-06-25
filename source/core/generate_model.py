@@ -12,7 +12,7 @@ class GenerateModel:
 
         # Tự động tải mô hình gốc nếu chưa có local
         if not os.path.exists(base_model_local) or not os.path.exists(os.path.join(base_model_local, "config.json")):
-            print("🔽 Đang tải mô hình base từ Hugging Face...")
+            print("Đang tải mô hình base từ Hugging Face...")
             snapshot_download(
                 repo_id=base_model_repo,
                 local_dir=base_model_local,
@@ -47,7 +47,7 @@ class GenerateModel:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.lora_model.to(self.device)
 
-        print("✅ Generate model loaded successfully!")
+        print("Generate model loaded successfully!")
 
     def answer(self, prompt, **generate_kwargs):
         if not prompt or not isinstance(prompt, str):
