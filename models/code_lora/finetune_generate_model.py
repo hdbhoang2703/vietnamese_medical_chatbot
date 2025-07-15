@@ -6,7 +6,7 @@ from transformers import Seq2SeqTrainingArguments, Seq2SeqTrainer
 from peft import get_peft_model, LoraConfig, TaskType
 
 # load model
-model_id = "VietAI/vit5-base"
+model_id = "VietAI/vit5-large"
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
